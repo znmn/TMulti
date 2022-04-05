@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using StaticSys;
 
 namespace StaticSys
@@ -38,6 +39,7 @@ namespace TeleMulti
 
         public void Start()
         {
+            Console.Title = "Telegram Multi Instance";
             "========== Telegram Multi ==========\n[I] Created by : Zainul Muhaimin\n[I] Github : https://github.com/znmn\n[I] Instagram : https://www.instagram.com/xznmnx/\n========== Telegram Multi ==========".Print();
             this.Inialize();
             start:
