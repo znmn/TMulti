@@ -16,6 +16,10 @@ namespace StaticSys
         {
             Console.WriteLine(text);
         }
+        public static int To(this int min, int max)
+        {
+            return new Random().Next(min, max);
+        }
     }
 }
 
@@ -42,7 +46,7 @@ namespace TeleMulti
             Console.Title = "Telegram Multi Instance";
             "========== Telegram Multi ==========\n[I] Created by : Zainul Muhaimin\n[I] Github : https://github.com/znmn\n[I] Instagram : https://www.instagram.com/xznmnx/\n========== Telegram Multi ==========".Print();
             this.Inialize();
-            start:
+        start:
             "\n- ACTION -\n[1] Run Folder\n[2] Create Folder\n[3] Delete Folder\n[4] Exit".Print();
             choose = "[?] Select Action : ".Ask();
             switch (choose)
@@ -80,9 +84,19 @@ namespace TeleMulti
         {
             if (!File.Exists(this.fFolder))
             {
+            back:
                 this.tFolder = Sys.Ask("[?] Select default Folder : ");
-                File.WriteAllText(this.fFolder, this.tFolder);
-                Directory.CreateDirectory(this.pFolder);
+                this.tFolder = this.tFolder.TrimEnd(new char[] { '\\', '/' });
+                if (File.Exists(this.tFolder + "/" + "Telegram.exe"))
+                {
+                    File.WriteAllText(this.fFolder, this.tFolder);
+                    Directory.CreateDirectory(this.pFolder);
+                }
+                else
+                {
+                    "[!] Invalid Telegram Default Path!".Print();
+                    goto back;
+                }
             }
             else
             {
@@ -101,6 +115,7 @@ namespace TeleMulti
                 }
                 File.WriteAllText(this.aFolder, isi);
             }
+
         }
 
         protected bool Run()
@@ -142,10 +157,18 @@ namespace TeleMulti
         protected bool Create()
         {
             string? name = "\n[?] Name Account : ".Ask();
-            Directory.CreateDirectory(this.pFolder + "/" + name);
-            File.AppendAllText(this.aFolder, char.ToUpper(name.First()) + name[1..].ToLower() + ",/" + name + Environment.NewLine);
-            ("[I] Success Creating Folder " + name + "...").Print();
-            return true;
+            try
+            {
+                Directory.CreateDirectory(this.pFolder + "/" + name);
+                File.AppendAllText(this.aFolder, char.ToUpper(name.First()) + name[1..].ToLower() + ",/" + name + Environment.NewLine);
+                ("[I] Success Creating Folder " + name + "...").Print();
+                return true;
+            }
+            catch (Exception e)
+            {
+                ("[!] Error Creating Folder " + name + "...").Print();
+                return false;
+            }
         }
 
         protected bool Delete()
